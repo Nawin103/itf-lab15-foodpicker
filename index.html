@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FOOD PICKER ITF | สุ่มเมนูอาหาร</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #e63946;
+      --primary-dark: #d62839;
+      --accent: #f4a261;
+      --dark: #1d3557;
+      --text: #2b2d42;
+      --bg: #f8f9fa;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    body {
+      font-family: 'Prompt', 'Kanit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--dark);
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      color: #fff;
+      font-family: 'Kanit', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      font-weight: 400;
+      font-size: 1rem;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .hero h1 {
+      font-family: 'Kanit', sans-serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero p {
+      color: #666;
+      font-size: 1.15rem;
+    }
+
+    .food-card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 3rem 2rem;
+      box-shadow: var(--shadow);
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .food-badge {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--accent);
+      color: #fff;
+      padding: 0.55rem 1.2rem;
+      border-radius: 24px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .food-image {
+      width: 100%;
+      max-width: 400px;
+      height: 320px;
+      object-fit: cover;
+      border-radius: 20px;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+      border: 7px solid #fff;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .food-name {
+      font-family: 'Kanit', sans-serif;
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 0.75rem;
+    }
+
+    .food-desc {
+      font-family: 'Prompt', sans-serif;
+      font-size: 1.15rem;
+      color: #555;
+      margin-bottom: 1.75rem;
+    }
+
+    .food-price {
+      font-family: 'Kanit', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 2.5rem;
+    }
+
+    .btn-pick {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      border: none;
+      padding: 1.3rem 2.8rem;
+      font-family: 'Kanit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(230, 57, 70, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .btn-pick:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 32px rgba(230, 57, 70, 0.55);
+    }
+
+    .food-card.loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #888;
+      font-size: 0.95rem;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <div class="navbar-container">
+      <a href="#" class="logo">FOOD <span>PICKER ITF</span></a>
+      <nav>
+        <ul>
+          <li><a href="#">หน้าแรก</a></li>
+          <li><a href="#">เกี่ยวกับเรา</a></li>
+          <li><a href="#">ติดต่อเรา</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main>
+    <section class="hero">
+      <h1>อะไรดีคะ?</h1>
+      <p>สุ่มเมนูอาหารอร่อย ๆ สำหรับมื้อต่อไปของคุณ</p>
+    </section>
+
+    <div class="food-card" id="foodCard">
+      <span class="food-badge">สุ่มใหม่ได้ทุกวัน</span>
+
+      <!-- ชี้ไปที่ชื่อไฟล์รูปตรงๆ เพราะอยู่โฟลเดอร์เดียวกัน -->
+      <img id="foodImage" src="food1.jpg" alt="รูปภาพเมนูอาหาร" class="food-image">
+
+      <h2 id="foodName" class="food-name">แกงเขียวหวานไก่</h2>
+      <p id="foodDesc" class="food-desc">แกงเขียวหวานหอมกะทิ เนื้อไก่นุ่ม กับมะเขือพวงและใบโหระพาสุดหอม</p>
+      <div id="foodPrice" class="food-price">70 บาท</div>
+
+      <div style="margin-top: 1rem;">
+        <button id="pickBtn" class="btn-pick">
+          <span>🎲 สุ่มเมนูอาหาร</span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 FOOD PICKER ITF. สร้างขึ้นเพื่อช่วยเลือกเมนูอาหารค่ะ</p>
+  </footer>
+
+  <script>
+    /* แก้ไข Path รูปภาพให้เหลือแค่ชื่อไฟล์ตรงๆ */
+    const foods = [
+      {
+        name: 'แกงเขียวหวานไก่',
+        desc: 'แกงเขียวหวานหอมกะทิ เนื้อไก่นุ่ม กับมะเขือพวงและใบโหระพาสุดหอม',
+        price: '70',
+        image: 'food1.jpg'
+      },
+      {
+        name: 'มะม่วงเหนียวทุเรียน',
+        desc: 'ข้าวเหนียวมะม่วงหวานมัน กับทุเรียนหมอนทองเนื้อเนียนหวานหอม อาหารว่างยอดนิยม',
+        price: '85',
+        image: 'food2.jpg'
+      },
+      {
+        name: 'ข้าวมันไก่ทอด',
+        desc: 'ข้าวมันหอมนุ่มกับไก่ทอดกรอบ ราดน้ำจิ้มเต้าเจี้ยวรสเด็ด แตงกวาสดเคียงด้านข้าง',
+        price: '60',
+        image: 'food3.jpg'
+      },
+      {
+        name: 'ต้มยำกุ้งน้ำข้น',
+        desc: 'ต้มยำรสจัดจ้าน หอมสมุนไพรไทย กุ้งตัวโตเต็มคำ น้ำซุปเข้มข้น เผ็ดเปรี้ยวลงตัว',
+        price: '120',
+        image: 'food4.jpg'
+      },
+      {
+        name: 'ผัดไทยกุ้งสด',
+        desc: 'เส้นจีนผัดกับกุ้งสด หอมกลิ่นกระเทียมเจียว พร้อมถั่วงอกสดและถั่วลิสงคั่ว รสชาติกลมกล่อมแบบต้นตำรับ',
+        price: '65',
+        image: 'food5.jpg'
+      },
+      {
+        name: 'ส้มตำปูปลาร้า',
+        desc: 'ส้มตำรสแซ่บถั่วฝักยาว มะเขือเทศ และปูเค็มกับปลาร้ารสเข้มข้น แซ่บถึงเครื่อง',
+        price: '55',
+        image: 'food6.jpg'
+      }
+    ];
+
+    const foodImage = document.getElementById('foodImage');
+    const foodName = document.getElementById('foodName');
+    const foodDesc = document.getElementById('foodDesc');
+    const foodPrice = document.getElementById('foodPrice');
+    const pickBtn = document.getElementById('pickBtn');
+    const foodCard = document.getElementById('foodCard');
+
+    let lastIndex = 0;
+
+    function pickRandomFood() {
+      let index;
+      do {
+        index = Math.floor(Math.random() * foods.length);
+      } while (foods.length > 1 && index === lastIndex);
+
+      lastIndex = index;
+      const food = foods[index];
+
+      foodCard.classList.add('loading');
+
+      setTimeout(() => {
+        foodImage.src = food.image;
+        foodImage.alt = food.name;
+        foodName.textContent = food.name;
+        foodDesc.textContent = food.desc;
+        foodPrice.textContent = food.price + ' บาท';
+        foodCard.classList.remove('loading');
+      }, 150);
+    }
+
+    pickBtn.addEventListener('click', pickRandomFood);
+  </script>
+</body>
+</html>
